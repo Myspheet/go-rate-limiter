@@ -33,7 +33,7 @@ func main() {
 	// })
 
 	// new limiter
-	limiter, err := limiter.NewRateLimiter("fixed_window", map[string]interface{}{
+	limiter, err := limiter.NewRateLimiter("fixed_window", map[string]any{
 		"window_duration": time.Minute,
 		"window_tokens":   5,
 		"window_size":     1,

@@ -7,7 +7,7 @@ type Limiter interface {
 }
 
 // used to create the rate limiter with the default config
-type LimiterFactory func(cfg map[string]interface{}) Limiter
+type LimiterFactory func(cfg map[string]any) Limiter
 
 var limiterRegistry = make(map[string]LimiterFactory)
 
