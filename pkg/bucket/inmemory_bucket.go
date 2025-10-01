@@ -1,20 +1,29 @@
 package bucket
 
-type InMemoryBucket struct {
-	buckets map[string]*TokenBucketType
+type InMemoryBucket[T any] struct {
+	buckets map[string]*T
 }
 
-func NewInMemoryBucket() *InMemoryBucket {
-	return &InMemoryBucket{
-		buckets: make(map[string]*TokenBucketType),
+func NewInMemoryBucket[T any]() *InMemoryBucket[T] {
+	return &InMemoryBucket[T]{
+		buckets: make(map[string]*T),
 	}
 }
 
-func (b *InMemoryBucket) Get(key string) *TokenBucketType {
+func (b *InMemoryBucket[T]) Get(key string) *T {
 	return b.buckets[key]
 }
 
-func (b *InMemoryBucket) Set(key string, bucket *TokenBucketType) error {
+func (b *InMemoryBucket[T]) Set(key string, bucket *T) error {
 	b.buckets[key] = bucket
 	return nil
+}
+
+func (b *InMemoryBucket[T]) Delete(key string) error {
+	delete(b.buckets, key)
+	return nil
+}
+
+func (b *InMemoryBucket[T]) Clear() {
+	b.buckets = make(map[string]*T)
 }

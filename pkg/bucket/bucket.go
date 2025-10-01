@@ -11,7 +11,15 @@ type TokenBucketType struct {
 	LastRefill time.Time
 }
 
-type Bucket interface {
-	Get(key string) *TokenBucketType
-	Set(key string, bucket *TokenBucketType) error
+type FixedWindowBucketType struct {
+	CurrentWindow int64
+	WindowTokens  int
+	Capacity      int
+}
+
+type Bucket[T any] interface {
+	Get(key string) *T
+	Set(key string, bucket *T) error
+	Delete(key string) error
+	Clear()
 }

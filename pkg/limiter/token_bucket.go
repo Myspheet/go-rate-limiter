@@ -12,13 +12,13 @@ type BucketConfig struct {
 	Tokens     int
 }
 type TokenBucketLimiter struct {
-	bucket     bucket.Bucket
+	bucket     bucket.Bucket[bucket.TokenBucketType]
 	capacity   int
 	refillRate float64
 	tokens     int
 }
 
-func NewTokenBucketLimiter(tokenBucket bucket.Bucket, bucketConfig BucketConfig) *TokenBucketLimiter {
+func NewTokenBucketLimiter(tokenBucket bucket.Bucket[bucket.TokenBucketType], bucketConfig BucketConfig) *TokenBucketLimiter {
 	if bucketConfig.Capacity == 0 {
 		bucketConfig.Capacity = 5
 	}

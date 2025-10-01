@@ -24,6 +24,15 @@ func (m *mockBucket) Set(key string, tb *bucket.TokenBucketType) error {
 	return nil
 }
 
+func (m *mockBucket) Delete(key string) error {
+	delete(m.store, key)
+	return nil
+}
+
+func (m *mockBucket) Clear() {
+	m.store = make(map[string]*bucket.TokenBucketType)
+}
+
 func TestTokenBucketLimiter_Allow_NewKey(t *testing.T) {
 	mockB := &mockBucket{store: make(map[string]*bucket.TokenBucketType)}
 
