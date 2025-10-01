@@ -18,6 +18,8 @@ type TokenBucketLimiter struct {
 	tokens     int
 }
 
+// NewTokenBucketLimiter creates a new TokenBucketLimiter with the given tokenBucket and bucketConfig.
+// If the bucketConfig's Capacity, RefillRate, or Tokens is 0, it will be set to the default values of 5, 1, and 5 respectively.
 func NewTokenBucketLimiter(tokenBucket bucket.Bucket[bucket.TokenBucketType], bucketConfig BucketConfig) *TokenBucketLimiter {
 	if bucketConfig.Capacity == 0 {
 		bucketConfig.Capacity = 5
@@ -38,6 +40,10 @@ func NewTokenBucketLimiter(tokenBucket bucket.Bucket[bucket.TokenBucketType], bu
 	}
 }
 
+// Allow returns true if the key is allowed to be accessed, false otherwise.
+// If the key doesn't exist, it will be created and allowed.
+// If the key exists, it will check the elapsed time since last refill and add tokens accordingly.
+// It will then deduct a token for this request and return true if the key is allowed, false otherwise.
 func (tb *TokenBucketLimiter) Allow(key string) bool {
 	now := time.Now()
 	// get bucket from bucket store

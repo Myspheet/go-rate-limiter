@@ -7,9 +7,9 @@ import (
 )
 
 type FixedWindowConfig struct {
-	WindowDuration time.Duration
-	WindowTokens   int
-	WindowSize     int
+	WindowDuration time.Duration // duration of the window, seconds, minutes etc
+	WindowTokens   int           // number of tokens per window
+	WindowSize     int           // number to multiply the duration by
 }
 
 type FixedWindowLimiter struct {

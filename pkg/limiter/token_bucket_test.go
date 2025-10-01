@@ -15,20 +15,29 @@ type mockBucket struct {
 	store map[string]*bucket.TokenBucketType
 }
 
+// Get returns the token bucket for the given key from the in-memory store.
+// If the key doesn't exist, it returns nil.
 func (m *mockBucket) Get(key string) *bucket.TokenBucketType {
 	return m.store[key]
 }
 
+// Set sets the token bucket for the given key in the in-memory store.
+// If the key already exists, it will overwrite the existing token bucket.
+// It returns an error if there was a problem setting the token bucket.
 func (m *mockBucket) Set(key string, tb *bucket.TokenBucketType) error {
 	m.store[key] = tb
 	return nil
 }
 
+// Delete removes the token bucket for the given key from the in-memory store.
+// It returns an error if there was a problem deleting the token bucket.
 func (m *mockBucket) Delete(key string) error {
 	delete(m.store, key)
 	return nil
 }
 
+// Clear resets the in-memory store by deleting all existing token buckets.
+// This is useful for testing purposes.
 func (m *mockBucket) Clear() {
 	m.store = make(map[string]*bucket.TokenBucketType)
 }
