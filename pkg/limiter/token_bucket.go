@@ -18,6 +18,16 @@ type TokenBucketLimiter struct {
 	tokens     int
 }
 
+func init() {
+	RegisterLimiter("token_bucket", func(cfg map[string]any) Limiter {
+		return NewTokenBucketLimiter(bucket.NewInMemoryBucket[bucket.TokenBucketType](), BucketConfig{
+			Capacity:   cfg["capacity"].(int),
+			RefillRate: cfg["refill_rate"].(float64),
+			Tokens:     cfg["tokens"].(int),
+		})
+	})
+}
+
 // NewTokenBucketLimiter creates a new TokenBucketLimiter with the given tokenBucket and bucketConfig.
 // If the bucketConfig's Capacity, RefillRate, or Tokens is 0, it will be set to the default values of 5, 1, and 5 respectively.
 func NewTokenBucketLimiter(tokenBucket bucket.Bucket[bucket.TokenBucketType], bucketConfig BucketConfig) *TokenBucketLimiter {

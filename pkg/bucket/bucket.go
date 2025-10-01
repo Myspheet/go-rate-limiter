@@ -17,7 +17,16 @@ type FixedWindowBucketType struct {
 	Capacity      int   // total number of tokens in the window
 }
 
-type Bucket[T any] interface {
+type SlidingWindowLogBucketType struct {
+	WindowLog []time.Time
+	Capacity  int
+}
+
+type AllowedTypes interface {
+	TokenBucketType | FixedWindowBucketType | SlidingWindowLogBucketType
+}
+
+type Bucket[T AllowedTypes] interface {
 	Get(key string) *T
 	Set(key string, bucket *T) error
 	Delete(key string) error

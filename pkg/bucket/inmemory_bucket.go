@@ -1,10 +1,10 @@
 package bucket
 
-type InMemoryBucket[T any] struct {
+type InMemoryBucket[T AllowedTypes] struct {
 	buckets map[string]*T
 }
 
-func NewInMemoryBucket[T any]() *InMemoryBucket[T] {
+func NewInMemoryBucket[T AllowedTypes]() *InMemoryBucket[T] {
 	return &InMemoryBucket[T]{
 		buckets: make(map[string]*T),
 	}

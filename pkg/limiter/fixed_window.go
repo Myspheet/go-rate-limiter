@@ -19,6 +19,16 @@ type FixedWindowLimiter struct {
 	WindowTokens   int
 }
 
+func init() {
+	RegisterLimiter("fixed_window", func(cfg map[string]any) Limiter {
+		return NewFixedWindowLimiter(bucket.NewInMemoryBucket[bucket.FixedWindowBucketType](), FixedWindowConfig{
+			WindowDuration: cfg["window_duration"].(time.Duration),
+			WindowTokens:   cfg["window_tokens"].(int),
+			WindowSize:     cfg["window_size"].(int),
+		})
+	})
+}
+
 func NewFixedWindowLimiter(fwBucket bucket.Bucket[bucket.FixedWindowBucketType], fwConfig FixedWindowConfig) *FixedWindowLimiter {
 
 	if fwConfig.WindowSize == 0 {
@@ -42,7 +52,7 @@ func NewFixedWindowLimiter(fwBucket bucket.Bucket[bucket.FixedWindowBucketType],
 }
 
 func (f *FixedWindowLimiter) Allow(key string) bool {
-	currentWindow := getCurrentWindow(f.WindowDuration)
+	currentWindow := getCurrentWindow(time.Duration(f.WindowSize) * f.WindowDuration)
 
 	// check if the key exists
 	fw := f.bucket.Get(key)
